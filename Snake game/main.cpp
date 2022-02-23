@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "resource_manager.h"
+#include "random.h"
 
 const unsigned int SCREEN_WIDTH = 600;
 const unsigned int SCREEN_HEIGHT = 600;
@@ -50,6 +51,7 @@ int main() {
     float previous_time = 0.0f;
 
     //Initialize game
+    Random::setSeed((unsigned int)(glfwGetTime()*1e6));
     SnakeGame->init_game();
 
     while(!glfwWindowShouldClose(window)) {
@@ -84,10 +86,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 
-    if(key == GLFW_KEY_RIGHT) movementKey = 0;
-    else if (key == GLFW_KEY_LEFT) movementKey = 1;
-    else if (key == GLFW_KEY_DOWN) movementKey = 2;
-    else if (key == GLFW_KEY_UP) movementKey = 3;
+    if(movementKey == 0 || movementKey == 1) {
+        if (key == GLFW_KEY_DOWN) movementKey = 2;
+        else if (key == GLFW_KEY_UP) movementKey = 3;
+    }
+    else {
+        if(key == GLFW_KEY_RIGHT) movementKey = 0;
+        else if (key == GLFW_KEY_LEFT) movementKey = 1;
+    }
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
